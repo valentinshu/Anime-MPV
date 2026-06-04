@@ -91,8 +91,7 @@ console.log(`Observed properties: ${OBSERVED_PROPERTIES[0][0]}`)
 
 // Set property
 await setProperty('volume', 75)
-const pause = async () => await setProperty('pause', true)
-const play = async () => await setProperty('pause', false)
+const pausePlay = async (currentPauseState: boolean) => await setProperty('pause', !currentPauseState)
 await setProperty('fullscreen', 'yes')
 // Get property
 const volume = await getProperty('volume', 'int64')
@@ -115,6 +114,7 @@ function App() {
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [pauseState, setPauseState] = useState(false);
 
   const HandleSetTime = async (time: number) => await setProperty('time-pos', time)
   
@@ -128,6 +128,7 @@ function App() {
         ({ name, data }) => {
           switch (name) {
             case "pause":
+              setPauseState(data ?? false)
               break;
 
             case "time-pos":
@@ -160,19 +161,15 @@ function App() {
 
   return (
     <main className="container">
-      <button onClick={() => pause()}>Pause</button>
-      <button onClick={() => play()}>Play</button>
+      <button onClick={() => pausePlay(pauseState)}>Pause/Play</button>
       <button onClick={() => toggleFullscreen()}>fullscreen</button>
       <button onClick={() => enableAnime4K()}>ShadersOn</button>
       <button onClick={() => disableAnime4K()}>ShadersOf</button>
       <input type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
         (e) => {
           const selectedTime = Number(e.target.value);
-          console.log(selectedTime);
           HandleSetTime(selectedTime)
         }} />
-      <button onClick={() => console.log(duration)}>Duration</button>
-      <button onClick={() => console.log(currentTime)}>TimeA</button>
     </main>
   );
 }
