@@ -10,7 +10,7 @@ import {
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { resolveResource } from '@tauri-apps/api/path'
 import "./App.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // Properties to observe
 // Tip: The optional third element, 'none', signals to TypeScript that the property's value may be null 
 // (e.g., when a file is not loaded), ensuring type safety in the callback function.
@@ -63,6 +63,7 @@ try {
 await command('loadfile', ['C:\\Users\\Valentin\\Downloads\\video.mp4'])
 
     // Observe properties
+    /*
 const unlisten = await observeProperties(
   OBSERVED_PROPERTIES,
   ({ name, data }) => {
@@ -86,6 +87,7 @@ const unlisten = await observeProperties(
     }
   })
 console.log(`Observed properties: ${OBSERVED_PROPERTIES[0][0]}`)
+*/
 
 // Set property
 await setProperty('volume', 75)
@@ -111,7 +113,48 @@ const toggleFullscreen = async () => {
 
 function App() {
 
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
+  const HandleSetTime = async (time: number) => await setProperty('time-pos', time)
+  
+
+  useEffect(() => {
+    let unlisten: (() => void) | undefined;
+    console.log("Efecto ejecutado");
+    async function setup() {
+      unlisten = await observeProperties(
+        OBSERVED_PROPERTIES,
+        ({ name, data }) => {
+          switch (name) {
+            case "pause":
+              break;
+
+            case "time-pos":
+              setCurrentTime(data ?? 0);
+              break;
+
+            case "duration":
+              setDuration(data ?? 0);
+              break;
+          }
+        }
+      );
+      try {
+        const dur = await getProperty('duration', 'double');
+        if (dur) setDuration(dur);
+      } catch (_) {
+        
+      }
+      
+    }
+
+    setup();
+
+    return () => {
+      unlisten?.();
+    };
+  }, []);
 
   
 
@@ -122,7 +165,14 @@ function App() {
       <button onClick={() => toggleFullscreen()}>fullscreen</button>
       <button onClick={() => enableAnime4K()}>ShadersOn</button>
       <button onClick={() => disableAnime4K()}>ShadersOf</button>
-      <input type="range" min="0" max={1500} value={80} className="slider" />
+      <input type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
+        (e) => {
+          const selectedTime = Number(e.target.value);
+          console.log(selectedTime);
+          HandleSetTime(selectedTime)
+        }} />
+      <button onClick={() => console.log(duration)}>Duration</button>
+      <button onClick={() => console.log(currentTime)}>TimeA</button>
     </main>
   );
 }
