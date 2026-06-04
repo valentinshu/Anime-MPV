@@ -9,6 +9,8 @@ import {
 } from 'tauri-plugin-libmpv-api'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { resolveResource } from '@tauri-apps/api/path'
+import "./App.css";
+import { useState } from 'react';
 // Properties to observe
 // Tip: The optional third element, 'none', signals to TypeScript that the property's value may be null 
 // (e.g., when a file is not loaded), ensuring type safety in the callback function.
@@ -56,7 +58,11 @@ try {
   console.error('mpv initialization failed:', error)
 }
 
-// Observe properties
+
+// Load and play a file
+await command('loadfile', ['C:\\Users\\Valentin\\Downloads\\video.mp4'])
+
+    // Observe properties
 const unlisten = await observeProperties(
   OBSERVED_PROPERTIES,
   ({ name, data }) => {
@@ -67,7 +73,7 @@ const unlisten = await observeProperties(
         break
       case 'time-pos':
         // data type: number | null
-        // console.log('Current time position:', data)
+        console.log('Current time position:', data)
         break
       case 'duration':
         // data type: number | null
@@ -79,10 +85,7 @@ const unlisten = await observeProperties(
         break
     }
   })
-  console.log(unlisten)
 console.log(`Observed properties: ${OBSERVED_PROPERTIES[0][0]}`)
-// Load and play a file
-await command('loadfile', ['C:\\Users\\Valentin\\Downloads\\video.mp4'])
 
 // Set property
 await setProperty('volume', 75)
@@ -107,6 +110,11 @@ const toggleFullscreen = async () => {
 }
 
 function App() {
+
+
+
+  
+
   return (
     <main className="container">
       <button onClick={() => pause()}>Pause</button>
@@ -114,6 +122,7 @@ function App() {
       <button onClick={() => toggleFullscreen()}>fullscreen</button>
       <button onClick={() => enableAnime4K()}>ShadersOn</button>
       <button onClick={() => disableAnime4K()}>ShadersOf</button>
+      <input type="range" min="0" max={1500} value={80} className="slider" />
     </main>
   );
 }

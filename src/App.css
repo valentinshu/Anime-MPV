@@ -3,3 +3,19 @@ html,
 body {
   background: transparent;
 }
+.slider {
+  appearance: none;
+  width: 300px;
+  height: 6px;
+  background: #444;
+  border-radius: 999px;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: rgba(143, 141, 141, 0.849);
+  border-radius: 50%;
+  cursor: pointer;
+}
