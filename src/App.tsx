@@ -179,24 +179,35 @@ function App() {
     };
   }, []);
 
+  function formatTime(seconds: number) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+
   
+    return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  
+
+}
 
   return (
     <main className="container">
       <button onClick={() => pausePlay(pauseState)}>{pauseState ? <img src={playIcon} alt="Play" width={25}
           height={25} /> : <img src={pauseIcon} alt="Play" width={25}
           height={25} />}</button>
-      <button onClick={() => toggleFullscreen()}>{fullScreenState ? <img src={fullscreenOfIcon} alt="Play" width={25}
-        height={25} /> : <img src={fullscreenOnIcon} alt="Play" width={25}
-        height={25} /> }</button>
-      <button onClick={() => switchAnime4K()}>{shadersState ? <img src={shadersOnIcon} alt="Play" width={25}
-        height={25} /> : <img src={shadersOffIcon} alt="Play" width={25}
-        height={25} />}</button>
-      <input type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
+            <span>{formatTime(currentTime)}</span>
+      <input className="slider" type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
         (e) => {
           const selectedTime = Number(e.target.value);
           HandleSetTime(selectedTime)
         }} />
+          <span>{`-${formatTime(duration - currentTime)}`}</span>
+      <button onClick={() => switchAnime4K()}>{shadersState ? <img src={shadersOnIcon} alt="Play" width={25}
+        height={25} /> : <img src={shadersOffIcon} alt="Play" width={25}
+        height={25} />}</button>
+      <button onClick={() => toggleFullscreen()}>{fullScreenState ? <img src={fullscreenOfIcon} alt="Play" width={25}
+        height={25} /> : <img src={fullscreenOnIcon} alt="Play" width={25}
+        height={25} /> }</button>
     </main>
   );
 }
