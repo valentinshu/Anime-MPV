@@ -16,6 +16,13 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.container:hover {
+  opacity: 1;
 }
 
 .slider::-webkit-slider-thumb {
@@ -37,4 +44,8 @@ span {
   color: white;
   margin: .3rem;
   padding-right: .4rem;
+}
+.mpv-container {
+  height: calc(100vh - 44px);
+  width: 99vw;
 }

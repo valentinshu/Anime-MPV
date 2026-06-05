@@ -191,12 +191,14 @@ function App() {
 }
 
   return (
+    <>
+    <div className='mpv-container' onClick={() => pausePlay(pauseState)} onDoubleClick={() => toggleFullscreen()}></div>
     <main className="container">
       <button onClick={() => pausePlay(pauseState)}>{pauseState ? <img src={playIcon} alt="Play" width={25}
           height={25} /> : <img src={pauseIcon} alt="Play" width={25}
           height={25} />}</button>
             <span>{formatTime(currentTime)}</span>
-      <input className="slider" type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
+      <input className="slider" type="range" min="0" max={duration} value={currentTime} onChange={
         (e) => {
           const selectedTime = Number(e.target.value);
           HandleSetTime(selectedTime)
@@ -209,6 +211,7 @@ function App() {
         height={25} /> : <img src={fullscreenOnIcon} alt="Play" width={25}
         height={25} /> }</button>
     </main>
+    </>
   );
 }
 
