@@ -16,8 +16,9 @@ import {
   fullscreenOfIcon,
   playIcon,
   pauseIcon,
-  shadersSwitchIcon
- } from './assets/icons/icons';
+  shadersOnIcon,
+  shadersOffIcon
+ } from './assets/icons/Icons';
  
 // Properties to observe
 // Tip: The optional third element, 'none', signals to TypeScript that the property's value may be null 
@@ -42,7 +43,9 @@ const mpvConfig: MpvConfig = {
 // path shaders
 const shaderDir = (await resolveResource('shaders')).replace(/\\/g, '/')
 
-const enableAnime4K = async () => {
+const switchAnime4K = async () => {
+  const glslShaders = await getProperty('glsl-shaders', 'string')
+  if (!glslShaders){
   await setProperty('glsl-shaders', [
     `${shaderDir}/Anime4K_Clamp_Highlights.glsl`,
     `${shaderDir}/Anime4K_Restore_CNN_VL.glsl`,
@@ -51,12 +54,12 @@ const enableAnime4K = async () => {
     `${shaderDir}/Anime4K_AutoDownscalePre_x2.glsl`,
     `${shaderDir}/Anime4K_AutoDownscalePre_x4.glsl`,
     `${shaderDir}/Anime4K_Upscale_CNN_x2_M.glsl`,
-  ].join(';'))
+  ].join(';'))}else {
+    await setProperty('glsl-shaders', '')
+  }
   const glslShadersModified = await getProperty('glsl-shaders', 'string')
 console.log('Current gls shaders is:', glslShadersModified)
 }
-
-const disableAnime4K= async () => await setProperty('glsl-shaders', '')
 
 // Initialize mpv
 try {
@@ -104,8 +107,6 @@ await setProperty('fullscreen', 'yes')
 // Get property
 const volume = await getProperty('volume', 'int64')
 console.log('Current volume is:', volume)
-const glslShaders = await getProperty('glsl-shaders', 'string')
-console.log('Current gls shaders is:', glslShaders)
 // const fullscreen = await getProperty('fullscreen', 'string')
 // console.log('Current fullscreen is:', fullscreen)
 // Clean up when done
@@ -123,6 +124,8 @@ function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [pauseState, setPauseState] = useState(false);
+  const [fullScreenState, setFullScreenState] = useState(false);
+  const [shadersState, setShadersState] = useState(false);
 
   const HandleSetTime = async (time: number) => await setProperty('time-pos', time)
   
@@ -130,6 +133,16 @@ function App() {
   useEffect(() => {
     let unlisten: (() => void) | undefined;
     console.log("Efecto ejecutado");
+
+    setInterval(async () => {
+    const windowCurrent = getCurrentWindow()
+    const isFullScreen = await windowCurrent.isFullscreen()
+    setFullScreenState(isFullScreen)
+    const isShadersActive = await getProperty('glsl-shaders', 'string')
+    setShadersState(!!isShadersActive)
+    }, 300)
+
+
     async function setup() {
       unlisten = await observeProperties(
         OBSERVED_PROPERTIES,
@@ -146,6 +159,7 @@ function App() {
             case "duration":
               setDuration(data ?? 0);
               break;
+            
           }
         }
       );
@@ -169,11 +183,15 @@ function App() {
 
   return (
     <main className="container">
-      <button onClick={() => pausePlay(pauseState)}><img src={playIcon} alt="Play" width={25}
-    height={25} /></button>
-      <button onClick={() => toggleFullscreen()}>fullscreen</button>
-      <button onClick={() => enableAnime4K()}>ShadersOn</button>
-      <button onClick={() => disableAnime4K()}>ShadersOf</button>
+      <button onClick={() => pausePlay(pauseState)}>{pauseState ? <img src={playIcon} alt="Play" width={25}
+          height={25} /> : <img src={pauseIcon} alt="Play" width={25}
+          height={25} />}</button>
+      <button onClick={() => toggleFullscreen()}>{fullScreenState ? <img src={fullscreenOfIcon} alt="Play" width={25}
+        height={25} /> : <img src={fullscreenOnIcon} alt="Play" width={25}
+        height={25} /> }</button>
+      <button onClick={() => switchAnime4K()}>{shadersState ? <img src={shadersOffIcon} alt="Play" width={25}
+        height={25} /> : <img src={shadersOnIcon} alt="Play" width={25}
+        height={25} />}</button>
       <input type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
         (e) => {
           const selectedTime = Number(e.target.value);
