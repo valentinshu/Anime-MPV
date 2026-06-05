@@ -189,8 +189,8 @@ function App() {
       <button onClick={() => toggleFullscreen()}>{fullScreenState ? <img src={fullscreenOfIcon} alt="Play" width={25}
         height={25} /> : <img src={fullscreenOnIcon} alt="Play" width={25}
         height={25} /> }</button>
-      <button onClick={() => switchAnime4K()}>{shadersState ? <img src={shadersOffIcon} alt="Play" width={25}
-        height={25} /> : <img src={shadersOnIcon} alt="Play" width={25}
+      <button onClick={() => switchAnime4K()}>{shadersState ? <img src={shadersOnIcon} alt="Play" width={25}
+        height={25} /> : <img src={shadersOffIcon} alt="Play" width={25}
         height={25} />}</button>
       <input type="range" min="0" max={duration} value={currentTime} className="slider" onChange={
         (e) => {
