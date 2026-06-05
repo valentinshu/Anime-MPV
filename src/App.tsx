@@ -11,6 +11,14 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import { resolveResource } from '@tauri-apps/api/path'
 import "./App.css";
 import { useEffect, useState } from 'react';
+import { 
+  fullscreenOnIcon,
+  fullscreenOfIcon,
+  playIcon,
+  pauseIcon,
+  shadersSwitchIcon
+ } from './assets/icons/icons';
+ 
 // Properties to observe
 // Tip: The optional third element, 'none', signals to TypeScript that the property's value may be null 
 // (e.g., when a file is not loaded), ensuring type safety in the callback function.
@@ -161,7 +169,8 @@ function App() {
 
   return (
     <main className="container">
-      <button onClick={() => pausePlay(pauseState)}>Pause/Play</button>
+      <button onClick={() => pausePlay(pauseState)}><img src={playIcon} alt="Play" width={25}
+    height={25} /></button>
       <button onClick={() => toggleFullscreen()}>fullscreen</button>
       <button onClick={() => enableAnime4K()}>ShadersOn</button>
       <button onClick={() => disableAnime4K()}>ShadersOf</button>
