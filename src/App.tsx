@@ -19,6 +19,8 @@ import {
   shadersOnIcon,
   shadersOffIcon,
   openFile,
+  muteOf,
+  muteOn,
 } from "./assets/icons/Icons";
 import IconsButtons from "./components/IconsButtons";
 import { open } from "@tauri-apps/plugin-dialog";
@@ -98,8 +100,8 @@ await setProperty("volume", 75);
 const pausePlay = async (currentPauseState: boolean) =>
   await setProperty("pause", !currentPauseState);
 // Get property
-const volume = await getProperty("volume", "int64");
-console.log("Current volume is:", volume);
+// const volume = await getProperty("volume", "int64");
+// console.log("Current volume is:", volume);
 // const fullscreen = await getProperty('fullscreen', 'string')
 // console.log('Current fullscreen is:', fullscreen)
 // Clean up when done
@@ -123,10 +125,25 @@ function App() {
   const [fullScreenState, setFullScreenState] = useState(false);
   const [shadersState, setShadersState] = useState(false);
   const [interpolState, setInterpolState] = useState("audio");
-  const [ruta, setRuta] = useState("");
+  const [volume, setVolume] = useState(75);
+  const [storeVolme, setStoreVolume] = useState(volume);
 
   const HandleSetTime = async (time: number) =>
     await setProperty("time-pos", time);
+
+  const HandleSetVolume = async (selectedVolume: number) => {
+    await setProperty("volume", selectedVolume);
+    setVolume(selectedVolume);
+  };
+
+  const HandleMute = async () => {
+    setStoreVolume(volume);
+    if (volume > 0) {
+      HandleSetVolume(0);
+    } else {
+      HandleSetVolume(storeVolme);
+    }
+  };
 
   useEffect(() => {
     let unlisten: (() => void) | undefined;
@@ -188,7 +205,6 @@ function App() {
     });
 
     if (typeof selected === "string") {
-      setRuta(selected);
       await command("loadfile", [selected]);
     }
   }
@@ -199,7 +215,7 @@ function App() {
         className="mpv-container"
         onClick={() => pausePlay(pauseState)}
         onDoubleClick={() => toggleFullscreen()}
-      ></div>
+      />
       <main className="container">
         <button onClick={seleccionarArchivo}>
           <IconsButtons
@@ -242,6 +258,28 @@ function App() {
         >
           interpolation
         </button>
+        <button onClick={() => HandleMute()}>
+          <IconsButtons
+            currentState={volume > 0}
+            trueIcon={muteOf}
+            falseIcon={muteOn}
+          />
+        </button>
+        <div className="volume-container">
+          <input
+            className="slider-volume"
+            type="range"
+            min="0"
+            max="100"
+            value={volume}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => {
+              const selectedVolume = Number(e.target.value);
+              HandleSetVolume(selectedVolume);
+            }}
+          />
+        </div>
+
         <button onClick={() => toggleFullscreen()}>
           <IconsButtons
             currentState={fullScreenState}

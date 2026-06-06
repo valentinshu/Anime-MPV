@@ -5,3 +5,5 @@ export { default as fullscreenOfIcon } from "./arrows-pointing-in.svg";
 export { default as shadersOnIcon } from "./sparklesOn.svg";
 export { default as shadersOffIcon } from "./sparklesOff.svg";
 export { default as openFile } from "./openFile.svg";
+export { default as muteOf } from "./mute-of.svg";
+export { default as muteOn } from "./mute-on.svg";
