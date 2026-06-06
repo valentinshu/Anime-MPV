@@ -4,3 +4,4 @@ export { default as fullscreenOnIcon } from "./arrows-pointing-out.svg";
 export { default as fullscreenOfIcon } from "./arrows-pointing-in.svg";
 export { default as shadersOnIcon } from "./sparklesOn.svg";
 export { default as shadersOffIcon } from "./sparklesOff.svg";
+export { default as openFile } from "./openFile.svg";

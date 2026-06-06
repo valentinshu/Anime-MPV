@@ -18,8 +18,10 @@ import {
   pauseIcon,
   shadersOnIcon,
   shadersOffIcon,
+  openFile,
 } from "./assets/icons/Icons";
 import IconsButtons from "./components/IconsButtons";
+import { open } from "@tauri-apps/plugin-dialog";
 
 // Properties to observe
 // Tip: The optional third element, 'none', signals to TypeScript that the property's value may be null
@@ -90,34 +92,6 @@ try {
 }
 
 // Load and play a file
-await command("loadfile", ["C:\\Users\\Valentin\\Downloads\\video.mp4"]);
-
-// Observe properties
-/*
-const unlisten = await observeProperties(
-  OBSERVED_PROPERTIES,
-  ({ name, data }) => {
-    switch (name) {
-      case 'pause':
-        // data type: boolean
-        console.log('Playback paused state:', data)
-        break
-      case 'time-pos':
-        // data type: number | null
-        console.log('Current time position:', data)
-        break
-      case 'duration':
-        // data type: number | null
-        console.log('Duration:', data)
-        break
-      case 'filename':
-        // data type: string | null
-        console.log('Current playing file:', data)
-        break
-    }
-  })
-console.log(`Observed properties: ${OBSERVED_PROPERTIES[0][0]}`)
-*/
 
 // Set property
 await setProperty("volume", 75);
@@ -149,6 +123,7 @@ function App() {
   const [fullScreenState, setFullScreenState] = useState(false);
   const [shadersState, setShadersState] = useState(false);
   const [interpolState, setInterpolState] = useState("audio");
+  const [ruta, setRuta] = useState("");
 
   const HandleSetTime = async (time: number) =>
     await setProperty("time-pos", time);
@@ -206,6 +181,17 @@ function App() {
 
     return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   }
+  async function seleccionarArchivo() {
+    const selected = await open({
+      multiple: false,
+      directory: false,
+    });
+
+    if (typeof selected === "string") {
+      setRuta(selected);
+      await command("loadfile", [selected]);
+    }
+  }
 
   return (
     <>
@@ -215,6 +201,13 @@ function App() {
         onDoubleClick={() => toggleFullscreen()}
       ></div>
       <main className="container">
+        <button onClick={seleccionarArchivo}>
+          <IconsButtons
+            currentState={true}
+            trueIcon={openFile}
+            falseIcon={openFile}
+          />
+        </button>
         <button onClick={() => pausePlay(pauseState)}>
           <IconsButtons
             currentState={pauseState}
