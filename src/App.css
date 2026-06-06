@@ -11,6 +11,7 @@ body {
   height: 6px;
   background: #444;
   border-radius: 999px;
+  cursor: pointer;
 }
 .container {
   display: flex;
@@ -35,6 +36,8 @@ body {
 }
 button {
   background: transparent;
+  color: white;
+  font-weight: bold;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -42,10 +45,18 @@ button {
 span {
   width: 35px;
   color: white;
-  margin: .3rem;
-  padding-right: .4rem;
+  margin: 0.3rem;
+  padding-right: 0.4rem;
 }
 .mpv-container {
   height: calc(100vh - 44px);
   width: 99vw;
+}
+.buttonInterpol {
+  background: transparent;
+  color: rgba(128, 128, 128, 0.699);
+  font-weight: bold;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
