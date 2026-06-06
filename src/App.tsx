@@ -19,6 +19,7 @@ import {
   shadersOnIcon,
   shadersOffIcon,
 } from "./assets/icons/Icons";
+import IconsButtons from "./components/IconsButtons";
 
 // Properties to observe
 // Tip: The optional third element, 'none', signals to TypeScript that the property's value may be null
@@ -215,11 +216,11 @@ function App() {
       ></div>
       <main className="container">
         <button onClick={() => pausePlay(pauseState)}>
-          {pauseState ? (
-            <img src={playIcon} alt="Play" width={25} height={25} />
-          ) : (
-            <img src={pauseIcon} alt="Play" width={25} height={25} />
-          )}
+          <IconsButtons
+            currentState={pauseState}
+            trueIcon={playIcon}
+            falseIcon={pauseIcon}
+          />
         </button>
         <span>{formatTime(currentTime)}</span>
         <input
@@ -235,11 +236,11 @@ function App() {
         />
         <span>{`-${formatTime(duration - currentTime)}`}</span>
         <button onClick={() => switchAnime4K()}>
-          {shadersState ? (
-            <img src={shadersOnIcon} alt="Play" width={25} height={25} />
-          ) : (
-            <img src={shadersOffIcon} alt="Play" width={25} height={25} />
-          )}
+          <IconsButtons
+            currentState={shadersState}
+            trueIcon={shadersOnIcon}
+            falseIcon={shadersOffIcon}
+          />
         </button>
         <button
           color={"white"}
@@ -249,11 +250,11 @@ function App() {
           interpolation
         </button>
         <button onClick={() => toggleFullscreen()}>
-          {fullScreenState ? (
-            <img src={fullscreenOfIcon} alt="Play" width={25} height={25} />
-          ) : (
-            <img src={fullscreenOnIcon} alt="Play" width={25} height={25} />
-          )}
+          <IconsButtons
+            currentState={fullScreenState}
+            trueIcon={fullscreenOfIcon}
+            falseIcon={fullscreenOnIcon}
+          />
         </button>
       </main>
     </>
