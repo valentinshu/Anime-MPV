@@ -141,4 +141,4 @@ Please open an issue first for major changes to discuss what you'd like to chang
 
 ## License
 
-MIT © YOUR_USERNAME
+MIT © valentinshu
