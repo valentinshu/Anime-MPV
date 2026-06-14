@@ -9,10 +9,10 @@ A lightweight desktop media player built with [Tauri](https://tauri.app/) and [R
 ## Screenshots
 
 <!-- Screenshot: Main player window with video loaded and interpolation off/on -->
-![Player]([screenshots/player.png](https://github.com/valentinshu/Anime-MPV/issues/1#issue-4657971289))
+![Player](https://github.com/valentinshu/Anime-MPV/issues/1#issue-4657971289)
 
 <!-- Screenshot: Anime4K shaders active, visual quality comparison -->
-![Anime4K]([screenshots/anime4k.png](https://github.com/valentinshu/Anime-MPV/issues/2#issue-4657973007))
+![Anime4K](https://github.com/valentinshu/Anime-MPV/issues/2#issue-4657973007)
 
 ---
 
